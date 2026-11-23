@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPO | Student Project Manager</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ================= AUTH VIEWS ================= -->
+<div id="authView" class="auth-view hidden">
+  <div class="auth-card">
+    <div class="logo">SPO</div>
+    <p class="auth-tag">Student Project Manager</p>
+
+    <form id="loginForm" novalidate>
+      <h2>Welcome Bai!</h2>
+      <div class="small">Log in to your account</div>
+      <input type="text" name="identifier" placeholder="Email or Username" autocomplete="username">
+      <input type="password" name="password" placeholder="Password" autocomplete="current-password">
+      <small class="err" data-err="password"></small>
+      <button type="submit" class="btn primary block">Log In</button>
+      <p>Don't have an account? <a id="goRegister">Register</a></p>
+      <p class="hint">Demo account: <strong>demo</strong> / <strong>demo123</strong></p>
+    </form>
+
+    <form id="registerForm" novalidate hidden>
+      <h2>Create Your Account</h2>
+      <div class="small">Join us and get started</div>
+      <input type="text" name="fullName" placeholder="Full Name" autocomplete="name">
+      <small class="err" data-err="fullName"></small>
+      <input type="email" name="email" placeholder="Email" autocomplete="email">
+      <small class="err" data-err="email"></small>
+      <input type="text" name="username" placeholder="Username" autocomplete="username">
+      <small class="err" data-err="username"></small>
+      <input type="password" name="password" placeholder="Password" autocomplete="new-password">
+      <small class="err" data-err="password"></small>
+      <button type="submit" class="btn primary block">Register</button>
+      <p>Already have an account? <a id="goLogin">Log in</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div id="appView" class="hidden">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="seal">SPO</div>
+      <div>
+        <div class="brand-name">Student Project</div>
+        <div class="brand-sub">MANAGER</div>
+      </div>
+    </div>
+
+    <nav>
+      <button class="nav-link" data-route="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/><path d="M9 21v-7h6v7"/></svg><span>Dashboard</span>
+      </button>
+      <button class="nav-link" data-route="priorities">
+        <svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 17l-5.6 3 1.3-6.2L3 9.5l6.3-.7z"/></svg><span>Top priorities</span>
+      </button>
+      <button class="nav-link" data-route="subjects">
+        <svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg><span>Subjects</span>
+      </button>
+      <button class="nav-link" data-route="activities">
+        <svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg><span>Activities</span>
+      </button>
+      <button class="nav-link" data-route="calendar">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Calendar</span>
+      </button>
+      <button class="nav-link" data-route="notifications">
+        <svg viewBox="0 0 24 24"><path d="M6 17v-6a6 6 0 0112 0v6l2 2H4z"/><path d="M10 21a2 2 0 004 0"/></svg><span>Notifications</span>
+        <em class="nav-badge hidden" id="notifBadge">0</em>
+      </button>
+      <button class="nav-link gap" data-route="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="side-user">
+      <div class="avatar" id="avatar">U</div>
+      <div><strong id="sideName">User</strong><small>Student</small></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <button class="mobile-menu" id="menuBtn">☰ Menu</button>
+    <div class="date-line" id="dateLine"></div>
+
+    <!-- DASHBOARD (C1–C11) -->
+    <section class="page" id="page-dashboard">
+      <div class="banner"><h1 id="dashGreeting">Welcome</h1></div>
+
+      <div class="stat-grid" id="statCards"></div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Overall progress</h3><span id="progressLabel" class="sub"></span></div>
+        <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Upcoming deadlines</h3><button class="link-btn" data-go="priorities">See all →</button></div>
+        <div id="upcomingPreview"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Shortcuts</h3>
+        <div class="shortcuts">
+          <button class="btn" data-shortcut="addSubject">+ Add Subject</button>
+          <button class="btn" data-shortcut="addActivity">+ Add Activity</button>
+          <button class="btn" data-go="calendar">Open Calendar</button>
+          <button class="btn" data-go="priorities">Top Priorities</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP PRIORITIES (D1–D10) -->
+    <section class="page" id="page-priorities">
+      <div class="page-head"><h1>Top priorities</h1><p>Urgent tasks and upcoming deadlines, most pressing first.</p></div>
+      <div class="panel">
+        <div class="prio-bar">
+          <div id="prioSummary" class="sub"></div>
+          <div class="tabs" id="prioTabs">
+            <button class="tab-btn active" data-pfilter="urgent">Urgent</button>
+            <button class="tab-btn" data-pfilter="upcoming">Upcoming</button>
+            <button class="tab-btn" data-pfilter="all">All pending</button>
+          </div>
+        </div>
+        <div id="priorityList"></div>
+      </div>
+    </section>
+
+    <!-- SUBJECTS (E1–E6) -->
+    <section class="page" id="page-subjects">
+      <div class="page-heading"><h1>My Subjects</h1><button class="btn primary" id="addSubjectBtn">+ Add Subject</button></div>
+      <div class="search-panel"><input type="search" id="subjectSearch" placeholder="Search subjects..."></div>
+      <div class="card-list" id="subjectList"></div>
+    </section>
+
+    <!-- ACTIVITIES (F1–F8) -->
+    <section class="page" id="page-activities">
+      <div class="page-heading"><h1>Activities &amp; Projects</h1><button class="btn primary" id="addActivityBtn">+ Add Activity</button></div>
+      <div class="filter-panel">
+        <select id="actSubject" aria-label="Subject"></select>
+        <input type="search" id="actSearch" placeholder="Search activities...">
+        <select id="actType" aria-label="Type">
+          <option value="all">All Types</option>
+          <option value="Activity">Activities</option>
+          <option value="Project">Projects</option>
+        </select>
+        <select id="actStatus" aria-label="Status">
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="overdue">Overdue</option>
+        </select>
+      </div>
+      <p class="sub list-count" id="actSummary"></p>
+      <div class="card-list" id="activityList"></div>
+    </section>
+
+    <!-- CALENDAR (G1–G5) -->
+    <section class="page" id="page-calendar">
+      <div class="page-head"><h1>Calendar</h1></div>
+      <div class="panel">
+        <div class="calendar-toolbar">
+          <div>
+            <button class="calendar-button" id="calPrev">←</button>
+            <button class="calendar-button" id="calToday">Today</button>
+            <button class="calendar-button" id="calNext">→</button>
+            <strong id="calLabel"></strong>
+          </div>
+          <div>
+            <button class="calendar-button on" data-view="month">Month</button>
+            <button class="calendar-button" data-view="week">Week</button>
+          </div>
+        </div>
+        <div class="calendar-toolbar">
+          <select id="calSubject"></select>
+          <select id="calStatus">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </div>
+        <div class="legend">
+          <span><i class="dot dot-pending"></i>Pending</span>
+          <span><i class="dot dot-completed"></i>Completed</span>
+          <span><i class="dot dot-overdue"></i>Overdue</span>
+        </div>
+        <div class="calendar-grid" id="calGrid"></div>
+      </div>
+      <div class="panel">
+        <h3>Event details</h3>
+        <div id="eventDetails"><p class="empty">Select a calendar date to view its events.</p></div>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS (H1.1–H1.10) -->
+    <section class="page" id="page-notifications">
+      <div class="page-heading">
+        <div><h1>Notifications</h1><p class="sub" id="notifSummary"></p></div>
+        <div class="row-gap">
+          <button class="btn" id="markAllRead">Mark all read</button>
+          <button class="btn" id="clearNotifs">Clear all</button>
+        </div>
+      </div>
+      <div class="panel"><div id="notifList"></div></div>
+    </section>
+
+    <!-- SETTINGS (I1–I5) -->
+    <section class="page" id="page-settings">
+      <div class="page-head"><h1>Settings</h1></div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Profile</h3><button class="btn" id="editProfileBtn">Edit profile</button></div>
+        <div id="profileRows"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Appearance</h3>
+        <div class="settings-row no-border">
+          <span>Dark mode</span>
+          <label class="switch"><input type="checkbox" id="darkToggle"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Accounts on this device</h3><button class="btn" id="addAccountBtn">+ Add account</button></div>
+        <div id="accountList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Session</h3>
+        <button class="btn danger" id="logoutBtn">Logout</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= SHARED MODAL ================= -->
+<div class="modal-backdrop hidden" id="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle"></h2>
+    <form id="modalForm" novalidate>
+      <p id="modalMessage" class="modal-msg hidden"></p>
+      <div id="modalFields"></div>
+      <div class="modal-buttons">
+        <button type="submit" class="btn primary" id="modalSubmit">Save</button>
+        <button type="button" class="btn ghost" id="modalCancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/priorities.js"></script>
+<script src="js/subjects.js"></script>
+<script src="js/activities.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
