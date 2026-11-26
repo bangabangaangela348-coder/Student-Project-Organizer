@@ -6,7 +6,7 @@
    ========================================================= */
 /*== Implement dashboard summary and progress tracking ==*/
 
-/*==Add dynamic welcome message for logged-in users==*/
+/*==Implemented a dynamic welcome greeting that displays the logged-in user's full name on the Dashboard.==*/
 const Dashboard = (() => {
   function render() {
     const d = Store.data();
