@@ -12,6 +12,8 @@ const Dashboard = (() => {
     const d = Store.data();
     const user = Store.currentUser();
     $("#dashGreeting").textContent = `Welcome, ${user.fullName}`;
+
+     
 /*==  ==*/
     const items = d.activities.map(a => ({ a, s: deadlineStatus(a), subject: d.subjects.find(x => x.id === a.subjectId) }));
     const pending = items.filter(x => x.s.key !== "completed");
