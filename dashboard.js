@@ -1,3 +1,4 @@
+
 "use strict";
 /* =========================================================
    dashboard.js — WBS C1–C11: summary cards, progress bar,
@@ -5,12 +6,13 @@
    ========================================================= */
 /*== Implement dashboard summary and progress tracking ==*/
 
+/*==Add dynamic welcome message for logged-in users==*/
 const Dashboard = (() => {
   function render() {
     const d = Store.data();
     const user = Store.currentUser();
     $("#dashGreeting").textContent = `Welcome, ${user.fullName}`;
-
+/*==  ==*/
     const items = d.activities.map(a => ({ a, s: deadlineStatus(a), subject: d.subjects.find(x => x.id === a.subjectId) }));
     const pending = items.filter(x => x.s.key !== "completed");
     const overdue = pending.filter(x => x.s.key === "overdue").length;
