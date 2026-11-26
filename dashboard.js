@@ -3,6 +3,7 @@
    dashboard.js — WBS C1–C11: summary cards, progress bar,
    upcoming preview, shortcuts
    ========================================================= */
+/*== Implement dashboard summary and progress tracking ==*/
 
 const Dashboard = (() => {
   function render() {
